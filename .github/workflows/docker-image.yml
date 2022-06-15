@@ -37,9 +37,9 @@ jobs:  # workflow中的job
 #           push: true
 #           tags: nriet/restcloud
         
-      - name: YiH_Dreamer:1.4.1-slim-buster
+      - name: YiH_Dreamer:3.0-icegridnode
         uses: docker/build-push-action@v2 # docker build  & push
         with:
           context: icegridnode/.
           push: true
-          tags: nriet/YiH_Dreamer:3..0-icegridnode
+          tags: nriet/YiH_Dreamer:3.0-icegridnode
