@@ -9,15 +9,21 @@ WORKDIR /app
 
 USER root
 
-ADD ncl*
-ADD YiH_Dreamer*
+ADD ncl.zip ncl.zip
+ADD ncl.z01 ncl.z01
+ADD ncl.z02 ncl.z02
+ADD YiH_Dreamer.zip YiH_Dreamer.zip
+ADD YiH_Dreamer.z01 YiH_Dreamer.z01
+ADD YiH_Dreamer.z02 YiH_Dreamer.z02
+ADD YiH_Dreamer.z03 YiH_Dreamer.z03
+ADD YiH_Dreamer.z04 YiH_Dreamer.z04
+ADD YiH_Dreamer.z05 YiH_Dreamer.z05
 
 RUN yum update -y && \
-    yum install -y kde-l10n-Chinese && \
-    yum reinstall -y glibc-common && \
+    yum install -y p7zip && \
     yum clean all && \
-    unzip ncl.zip && \
-    unzip YiH_Dreamer.zip && \
+    7za x ncl.zip && \
+    7za x YiH_Dreamer.zip && \
     rm -rf ncl*.z* && \
     rm -rf YiH_Dreamer*.z* && \
     rm -rf /var/cache/yum
