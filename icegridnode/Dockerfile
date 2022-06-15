@@ -21,11 +21,11 @@ ADD YiH_Dreamer.z05 YiH_Dreamer.z05
 
 RUN yum update -y && \
     yum install -y p7zip && \
-    yum clean all && \
     7za x ncl.zip && \
     7za x YiH_Dreamer.zip && \
     rm -rf ncl*.z* && \
     rm -rf YiH_Dreamer*.z* && \
+    yum clean all && \
     rm -rf /var/cache/yum
 
 # ±‡“Î…˙≥…”Ô—‘ø‚
