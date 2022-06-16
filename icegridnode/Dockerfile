@@ -9,40 +9,39 @@ WORKDIR /app
 
 USER root
 
-ADD ncl.zip ncl.zip
-ADD ncl.z01 ncl.z01
-ADD ncl.z02 ncl.z02
-ADD YiH_Dreamer.zip YiH_Dreamer.zip
-ADD YiH_Dreamer.z01 YiH_Dreamer.z01
-ADD YiH_Dreamer.z02 YiH_Dreamer.z02
-ADD YiH_Dreamer.z03 YiH_Dreamer.z03
-ADD YiH_Dreamer.z04 YiH_Dreamer.z04
-ADD YiH_Dreamer.z05 YiH_Dreamer.z05
+ADD ncl ncl
+ADD draw draw
+ADD icegridgui.jar icegridgui.jar
+RUN yum install -y java-1.8.0-openjdk nss && \
+	yum clean all && \
+	rm -rf /var/cache/yum
 
-RUN yum update -y && \
-    yum install -y p7zip && \
-    7za x ncl.zip && \
-    7za x YiH_Dreamer.zip && \
-    rm -rf ncl*.z* && \
-    rm -rf YiH_Dreamer*.z* && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN yum install -y https://zeroc.com/download/ice/3.7/el7/ice-repo-3.7.el7.noarch.rpm && \
+	yum install -y icegrid && \
+	yum clean all && \
+	rm -rf /var/cache/yum
 
-# ±àÒëÉú³ÉÓïÑÔ¿â
+# ç¼–è¯‘ç”Ÿæˆè¯­è¨€åº“
 RUN localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
 
-# ÉèÖÃÓïÑÔÄ¬ÈÏÖµÎªÖĞÎÄ£¬Ê±Çø¸ÄÎª¶«°ËÇø
+# è®¾ç½®è¯­è¨€é»˜è®¤å€¼ä¸ºä¸­æ–‡ï¼Œæ—¶åŒºæ”¹ä¸ºä¸œå…«åŒº
 RUN echo 'LANG="zh_CN.UTF-8"' > /etc/locale.conf
 
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+
 ENV NCARG_ROOT /app/ncl
-ENV PATH $PATH:$NCARG_ROOT/bin
-ENV YiH_Dreamer /app/YiH_Dreamer
+ENV YiH_Dreamer /app/draw
+ENV PATH $PATH:$NCARG_ROOT/bin:$YiH_Dreamer
 ENV LD_LIBRARY_PATH :$YiH_Dreamer/depend:$NCARG_ROOT/lib:$LD_LIBRARY_PATH
 
 ENV LANG zh_CN.UTF-8
 ENV LC_ALL zh_CN.UTF-8
 
+RUN ldd /app/draw/YiH_Dreamer 
 
-RUN /bin/echo "/app/YiH_Dreamer/YiH_Dreamer" >> /home/1001/.vnc/xstartup 
+RUN /bin/echo "icegridnode --Ice.Config=/app/draw/ice/conf/icegridnode.conf" >> /home/1001/.vnc/xstartup
+
+RUN /bin/echo "icegridadmin --Ice.Config=/app/draw/ice/conf/icegridnode.conf -e "application add /app/draw/ice/conf/application.xml"" >> /home/1001/.vnc/xstartup 
+
+RUN /bin/echo "java -jar icegridgui.jar" >> /home/1001/.vnc/xstartup 
